@@ -169,7 +169,7 @@ while ($true) {
     }
 
     # Remove configuration for pools specified in ExcludePoolName
-    if($Config.ExcludePoolName) {
+    if ($Config.ExcludePoolName) {
         $Config.ExcludePoolName | Foreach-Object { $Config.Pools.PSObject.Properties.Remove($_) }
     }
 
@@ -674,6 +674,7 @@ while ($true) {
 
         if ($Miner.Process -and -not $Miner.Process.HasExited) {
             $Miner_Data = $Miner.GetMinerData($Miner.Algorithm, ($Miner.New -and $Miner.Benchmarked -lt $Strikes))
+            $Miner_Data.Lines | ForEach-Object {Write-Log -Level Verbose $_}
             $Miner.Speed_Live = $Miner_Data.HashRate.PSObject.Properties.Value
 
             $Miner.Algorithm | Where-Object {$Miner_Data.HashRate.$_} | ForEach-Object {
