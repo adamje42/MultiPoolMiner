@@ -8,7 +8,8 @@
                       },
         "API":  "Claymore",
         "Port":  "23335",
-        "URI":  "https://bitcointalk.org/index.php?topic=2647654.0"
+        "URI":  "https://bitcointalk.org/index.php?topic=2647654.0",
+        "Fee": "0.0065"
     },
     {
         "Type":  "AMD",
@@ -19,6 +20,7 @@
                       },
         "API":  "Claymore",
         "Port":  "23335",
-        "URI":  "https://bitcointalk.org/index.php?topic=2647654.0"
+        "URI":  "https://bitcointalk.org/index.php?topic=2647654.0",
+        "Fee": "0.0065"
     }
 ]
