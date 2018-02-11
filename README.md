@@ -1,3 +1,5 @@
+My personal flavoring of MultiPoolMiner, now with built in DevFee compensation for miners.
+
 # MultiPoolMiner
 ###### created by aaronsace 
 ###### **WEBSITE: [MultiPoolMiner.io](https://multipoolminer.io)**
