@@ -57,6 +57,7 @@ enabled = false" | Set-Content "$(Split-Path $Path)\$($Pools.$(Get-Algorithm $_)
             API = "Prospector"
             Port = $Port
             URI = $Uri
+            Fee = 0.0097
         }
 
         if ($_ -eq "eth") {
