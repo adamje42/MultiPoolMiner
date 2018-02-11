@@ -11,7 +11,8 @@
                       },
         "API":  "Eminer",
         "Port":  "8550",
-        "URI":  "https://github.com/ethash/eminer-release/releases/download/v0.6.1-rc2/eminer.v0.6.1-rc2.win64.zip"
+        "URI":  "https://github.com/ethash/eminer-release/releases/download/v0.6.1-rc2/eminer.v0.6.1-rc2.win64.zip",
+        "Fee": "0.01"
     },
     {
         "Type":  [
@@ -25,6 +26,7 @@
                       },
         "API":  "Eminer",
         "Port":  "8550",
-        "URI":  "https://github.com/ethash/eminer-release/releases/download/v0.6.1-rc2/eminer.v0.6.1-rc2.win64.zip"
+        "URI":  "https://github.com/ethash/eminer-release/releases/download/v0.6.1-rc2/eminer.v0.6.1-rc2.win64.zip",
+        "Fee": "0.01"
     }
 ]

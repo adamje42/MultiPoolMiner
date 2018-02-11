@@ -7,5 +7,6 @@
                       "Lbry":  "\"$(if(([OpenCl.Platform]::GetPlatformIDs() | ForEach-Object {[OpenCl.Device]::GetDeviceIDs($_, [OpenCl.DeviceType]::All)} | Where-Object {$_.Type -eq \u0027GPU\u0027 -and $_.Vendor -eq \u0027Advanced Micro Devices, Inc.\u0027}).Count -eq 0) {0} else {$Stats.ClaymoreAmd2gbLbry30_Lbry_HashRate.Week})\""
                   },
     "API":  "Claymore",
-    "Port":  "13333"
+    "Port":  "13333",
+    "Fee": "0"
 }

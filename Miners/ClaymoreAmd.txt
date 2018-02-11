@@ -18,8 +18,8 @@
                           "Equihash":  "\"$($Stats.ClaymoreAmd_Equihash_HashRate.Week)\""
                       },
         "API":  "Claymore",
-        "Fee":  "0.025",
-        "Port":  "13333"
+        "Port":  "13333",
+        "Fee":  "0.025"
     },
     {
         "Type":  "AMD",
@@ -29,8 +29,8 @@
                           "Ethash":  "\"$(if(([OpenCl.Platform]::GetPlatformIDs() | ForEach-Object {[OpenCl.Device]::GetDeviceIDs($_, [OpenCl.DeviceType]::All)} | Where-Object {$_.Type -eq \u0027GPU\u0027 -and $_.Vendor -eq \u0027Advanced Micro Devices, Inc.\u0027} | Where-Object {$_.GlobalMemsize -ge 3000000000}).Count -eq 0) {0} else {$Stats.ClaymoreAmd_Ethash_HashRate.Week})\""
                       },
         "API":  "Claymore",
-        "Fee":  "0.01",
-        "Port":  "13333"
+        "Port":  "13333",
+        "Fee":  "0.01"
     },
     {
         "Type":  "AMD",
@@ -40,7 +40,7 @@
                           "Ethash2gb":  "\"$(if(([OpenCl.Platform]::GetPlatformIDs() | ForEach-Object {[OpenCl.Device]::GetDeviceIDs($_, [OpenCl.DeviceType]::All)} | Where-Object {$_.Type -eq \u0027GPU\u0027 -and $_.Vendor -eq \u0027Advanced Micro Devices, Inc.\u0027}).Count -eq 0) {0} else {$Stats.ClaymoreAmd_Ethash2gb_HashRate.Week})\""
                       },
         "API":  "Claymore",
-        "Fee":  "0.015",
-        "Port":  "13333"
+        "Port":  "13333",
+        "Fee":  "0",
     }
 ]
