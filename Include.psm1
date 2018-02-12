@@ -14,7 +14,7 @@ Function Write-Log {
 
     Begin { }
     Process {
-        $filename = ".\Logs\MultiPoolMiner-$(Get-Date -Format "yyyy-MM-dd").txt"
+        $filename = ".\Logs\MultiPoolMiner_$(Get-Date -Format "yyyy-MM-dd").txt"
         $date = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
         if (-not (Test-Path "Stats")) {New-Item "Stats" -ItemType "directory" | Out-Null}
@@ -100,7 +100,7 @@ function Set-Stat {
         if ($ChangeDetection -and $Value -eq $Stat.Live) {$Updated = $Stat.updated}
 
         if ($Value -lt $ToleranceMin -or $Value -gt $ToleranceMax) {
-            Write-Log -Level Warn "Stat file ($Name) was not updated because the value ($([Decimal]$Value)) is outside fault tolerance ($([Int]$ToleranceMin) ... $([Int]$ToleranceMax)). "
+            Write-Log -Level Warn "Stat file ($Name) was not updated because the value ($([Decimal]$Value)) is outside fault tolerance ($([Int]$ToleranceMin) to $([Int]$ToleranceMax)). "
         }
         else {
             $Span_Minute = [Math]::Min($Duration.TotalMinutes / [Math]::Min($Stat.Duration.TotalMinutes, 1), 1)
@@ -334,7 +334,7 @@ function Start-SubProcess {
         [Int]$Priority = 0
     )
 
-    $ScriptBlock = "Set-Location '$WorkingDirectory'; (Get-Process -Id `$PID).PriorityClass = $(@{-2 = "Idle"; -1 = "BelowNormal"; 0 = "Normal"; 1 = "AboveNormal"; 2 = "High"; 3 = "RealTime"}[$Priority]); "
+    $ScriptBlock = "Set-Location '$WorkingDirectory'; (Get-Process -Id `$PID).PriorityClass = '$(@{-2 = "Idle"; -1 = "BelowNormal"; 0 = "Normal"; 1 = "AboveNormal"; 2 = "High"; 3 = "RealTime"}[$Priority])'; "
     $ScriptBlock += "& '$FilePath'"
     if ($ArgumentList) {$ScriptBlock += " $ArgumentList"}
     $ScriptBlock += " *>&1"
