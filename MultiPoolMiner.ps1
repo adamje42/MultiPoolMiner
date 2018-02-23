@@ -52,14 +52,14 @@ param(
     [Switch]$Watchdog = $false,
     [Parameter(Mandatory = $false)]
     [Alias("Uri", "Url")]
-    [String]$MinerStatusUrl = "https://multipoolminer.io/monitor/miner.php",
+    [String]$MinerStatusUrl = "", #i.e https://multipoolminer.io/monitor/miner.php
     [Parameter(Mandatory = $false)]
     [String]$MinerStatusKey = "",
     [Parameter(Mandatory = $false)]
     [Double]$SwitchingPrevention = 1 #zero does not prevent miners switching
 )
 
-$Version = "2.7.2.2"
+$Version = "2.7.2.4"
 $Strikes = 3
 $SyncWindow = 5 #minutes
 
@@ -556,6 +556,7 @@ while ($true) {
             }
         }
     }
+    Get-Process -Name @($ActiveMiners | ForEach-Object {([IO.FileInfo]($_.Path | Split-Path -Leaf -ErrorAction Ignore)).BaseName}) -ErrorAction Ignore | Select-Object -ExpandProperty ProcessName | Compare-Object @($ActiveMiners | Where-Object Best -EQ $true | Where-Object {$_.GetStatus() -eq "Running"} | ForEach-Object {([IO.FileInfo]($_.Path | Split-Path -Leaf -ErrorAction Ignore)).BaseName}) | Where-Object SideIndicator -EQ "=>" | Select-Object -ExpandProperty InputObject | Select-Object -Unique | ForEach-Object {Stop-Process -Name $_ -Force -ErrorAction Ignore}
     if ($Downloader) {$Downloader | Receive-Job}
     Start-Sleep $Config.Delay #Wait to prevent BSOD
     $ActiveMiners | Where-Object Best -EQ $true | ForEach-Object {
@@ -587,6 +588,8 @@ while ($true) {
     }
 
     if ($Config.MinerStatusURL -and $Config.MinerStatusKey) {& .\ReportStatus.ps1 -Key $Config.MinerStatusKey -WorkerName $WorkerName -ActiveMiners $ActiveMiners -Miners $Miners -MinerStatusURL $Config.MinerStatusURL}
+
+    Clear-Host
 
     #Display mining information
     $Miners | Where-Object {$_.Profit -ge 1E-5 -or $_.Profit -eq $null} | Sort-Object -Descending Type, Profit_Bias | Format-Table -GroupBy Type (
@@ -664,9 +667,10 @@ while ($true) {
 
         if ($Miner.New) {$Miner.Benchmarked++}
 
+        $Miner_Data = $Miner.GetMinerData(($Miner.New -and $Miner.Benchmarked -lt $Strikes))
+        $Miner_Data.Lines | ForEach-Object {Write-Log -Level Verbose "$($Miner.Name): $_"}
+
         if ($Miner.GetStatus() -eq "Running") {
-            $Miner_Data = $Miner.GetMinerData(($Miner.New -and $Miner.Benchmarked -lt $Strikes))
-            $Miner_Data.Lines | ForEach-Object {Write-Log -Level Verbose "$($Miner.Name): $_"}
             $Miner.Speed_Live = $Miner_Data.HashRate.PSObject.Properties.Value
 
             $Miner.Algorithm | Where-Object {$Miner_Data.HashRate.$_} | ForEach-Object {
