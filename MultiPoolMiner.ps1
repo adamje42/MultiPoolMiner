@@ -59,7 +59,7 @@ param(
     [Double]$SwitchingPrevention = 1 #zero does not prevent miners switching
 )
 
-$Version = "2.7.2.5"
+$Version = "2.7.2.6"
 $Strikes = 3
 $SyncWindow = 5 #minutes
 
@@ -550,7 +550,7 @@ while ($true) {
         $Miner = $_
 
         if ($Miner.GetStatus() -eq "Running") {
-            Write-Log "Closing miner ($($Miner.Name)) because it is no longer the most profitable. "
+            Write-Log "Stopping miner ($($Miner.Name)). "
             $Miner.SetStatus("Idle")
 
             #Remove watchdog timer
