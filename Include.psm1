@@ -1,7 +1,4 @@
-﻿Import-Module "$env:Windir\System32\WindowsPowerShell\v1.0\Modules\NetSecurity\NetSecurity.psd1" -ErrorAction Ignore
-Import-Module "$env:Windir\System32\WindowsPowerShell\v1.0\Modules\Defender\Defender.psd1" -ErrorAction Ignore
-
-Set-Location (Split-Path $MyInvocation.MyCommand.Path)
+﻿Set-Location (Split-Path $MyInvocation.MyCommand.Path)
 
 Add-Type -Path .\OpenCL\*.cs
 
@@ -14,6 +11,10 @@ Function Write-Log {
 
     Begin { }
     Process {
+        # Get mutex named MPMWriteLog. Mutexes are shared across all threads and processes.
+        # This lets us ensure only one thread is trying to write to the file at a time.
+        $mutex = New-Object System.Threading.Mutex($false, "MPMWriteLog")
+
         $filename = ".\Logs\MultiPoolMiner_$(Get-Date -Format "yyyy-MM-dd").txt"
         $date = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
@@ -41,7 +42,14 @@ Function Write-Log {
                 Write-Debug -Message $Message
             }
         }
-        "$date $LevelText $Message" | Out-File -FilePath $filename -Append
+
+        # Attempt to aquire mutex, waiting up to 1 second if necessary.  If aquired, write to the log file and release mutex.  Otherwise, display an error.
+        if($mutex.WaitOne(1000)) {
+            "$date $LevelText $Message" | Out-File -FilePath $filename -Append -Encoding ascii
+            $mutex.ReleaseMutex()
+        } else {
+            Write-Error -Message "Log file is locked, unable to write message to log."
+        }
     }
     End {}
 }
